@@ -1,0 +1,9 @@
+.idea/
+**/node_modules/
+**/bower_components/
+**/package-lock.json
+**/yarn.lock
+**/build
+**/database.json
+**/ethereum.json
+**/ipfs.json
