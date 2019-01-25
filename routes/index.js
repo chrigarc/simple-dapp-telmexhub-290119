@@ -58,7 +58,44 @@ router.post('/upload', (req, res, next) => {
             res.json({status: 'success', url: `https://ipfs.io/ipfs/${hash}`});
         }).catch(err => console.error(err));
     }
+});
 
+router.get('/entero', (req, res, next) => {
+    const artifacts = require('../Solidity/build/contracts/SaveInfo.json');
+    const contract = new web3.eth.Contract(artifacts.abi, contractAddress);
+    contract.methods.getCadena().call().then(result => {
+        console.log("cadena value:" + result);
+        res.render('cadena', {title: 'Mostrando el valor de cadena', entero: result});
+    });
+});
+
+router.get('/form_ethereum', (req, res, next) => {
+    res.render('formulario_ethereum');
+});
+
+router.post('/upload_ethereum', (req, res, next) => {
+    console.log(req);
+    if (!req.files ||!req.files.file)  {
+        res.json({status: 'fail', message: 'not file'});
+    } else {
+        const artifacts = require('../Solidity/build/contracts/SaveInfo.json');
+        const contract = new web3.eth.Contract(artifacts.abi, contractAddress);
+        const ipfsClient = require('ipfs-http-client');
+        const configIPFS = require('../config/ipfs.json');
+        const ipfs = ipfsClient(configIPFS);
+        const content = req.files.file.data;
+        ipfs.add(content).then(result => {
+            const hash = result[0].hash;
+            console.log(`Descargue el archivo con esta URL: https://ipfs.io/ipfs/${hash}`);
+            contract.methods.setCadena(`https://ipfs.io/ipfs/${hash}`).send({from: config.address}).then(() => {
+                    contract.methods.getA().call().then(result => {
+                        console.log("new Value for cadena: " + result);
+                    });
+                }
+            );
+            res.json({status: 'success', url: `https://ipfs.io/ipfs/${hash}`});
+        }).catch(err => console.error(err));
+    }
 });
 
 module.exports = router;

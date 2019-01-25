@@ -1,5 +1,16 @@
 pragma solidity ^0.5.0;
 
+/*
+
+bytes:
+    Dynamically-sized byte array, see Arrays. Not a value-type!
+string:
+    Dynamically-sized UTF-8-encoded string, see Arrays. Not a value-type!
+
+As a rule of thumb, use bytes for arbitrary-length raw byte data and string for arbitrary-length string (UTF-8) data.
+If you can limit the length to a certain number of bytes, always use one of bytes1 to bytes32 because they are much cheaper.
+*/
+
 contract SaveInfo{
 
     uint entero;
@@ -48,6 +59,14 @@ contract SaveInfo{
 
     function getDinero() view public returns(uint){
         return address(this).balance;
+    }
+
+    function setCadena(string memory c) public {
+        cadena = c;
+    }
+
+    function getCadena() view public returns(string memory){
+        return cadena;
     }
 
     modifier onlyOwner {
