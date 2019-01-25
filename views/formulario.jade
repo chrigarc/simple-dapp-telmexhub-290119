@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    h1 Simple formulario
+    p selecciona cualquier archivo
+    form(method='POST' action='/upload' enctype='multipart/form-data')
+        div.form-group
+            label(for='file') file:
+            input#name.form-control(type='file',  name='file')
+        button.btn.btn-primary(type='submit') Enviar
