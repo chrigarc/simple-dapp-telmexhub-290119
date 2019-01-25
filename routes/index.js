@@ -27,4 +27,17 @@ router.get('/entero', function(req, res, next) {
   });
 });
 
+router.get('/random', function(req, res, next) {
+  const artifacts = require('../Solidity/build/contracts/SaveInfo.json');
+  const contract = new web3.eth.Contract(artifacts.abi, contractAddress);
+  contract.methods.setA(Math.floor(Math.random() * 10000)).send({from:config.address}).then(() => {
+        contract.methods.getA().call().then(result => {
+          console.log("new Value: "  + result);
+          res.render('entero', { title: 'Nuevo valor', entero: result });
+        });
+      }
+  );
+});
+
+
 module.exports = router;

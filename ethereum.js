@@ -23,3 +23,8 @@ const contract = new web3.eth.Contract(artifacts.abi, contractAddress);
 
 contract.methods.getA().call().then(result => console.log("entero value:"  + result));
 
+
+contract.methods.setA(Math.floor(Math.random() * 10000)).send({from:address}).then(() => {
+        contract.methods.getA().call().then(result => console.log("new Value: "  + result));
+    }
+);
